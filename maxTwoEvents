@@ -1,0 +1,31 @@
+from bisect import bisect_left
+
+class Solution:
+    def maxTwoEvents(self, events):
+       
+        events.sort(key=lambda x: x[0])
+        n = len(events)
+
+       
+        suffixMax = [0] * (n + 1)
+        for i in range(n - 1, -1, -1):
+            suffixMax[i] = max(suffixMax[i + 1], events[i][2])
+
+        
+        startTimes = [e[0] for e in events]
+
+        ans = 0
+
+        for i in range(n):
+            start, end, value = events[i]
+
+            
+            idx = bisect_left(startTimes, end + 1)
+
+           
+            total = value + suffixMax[idx]
+            ans = max(ans, total)
+
+        return ans
+
+        
